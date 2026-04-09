@@ -277,30 +277,69 @@ footer{padding:20px 24px 28px}
 </footer>
 
 <script>
-// Substack RSS
+// Substack RSS — cascading fallback
 (function(){
 var container=document.getElementById('posts');
-var ctrl=new AbortController();
-var timer=setTimeout(function(){ctrl.abort();},5000);
-fetch('https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fsommbc.substack.com%2Ffeed&count=3',{signal:ctrl.signal})
-.then(function(r){return r.json();}).then(function(data){
-clearTimeout(timer);
-if(!data.items||!data.items.length)return;
+
+function renderCards(posts){
+if(!posts.length)return;
 var html='<div class="post-grid">';
-data.items.slice(0,3).forEach(function(item){
-var d=new Date(item.pubDate);
+posts.slice(0,3).forEach(function(p){
+var d=new Date(p.pubDate);
 var date=d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}).toUpperCase();
-var excerpt=item.description?item.description.replace(/<[^>]*>/g,'').substring(0,140):'';
-html+='<a class="post-card" href="'+item.link+'" target="_blank" rel="noopener">';
+var excerpt=p.description?p.description.replace(/<[^>]*>/g,'').substring(0,140):'';
+html+='<a class="post-card" href="'+p.link+'" target="_blank" rel="noopener">';
 html+='<div class="p-date">'+date+'</div>';
-html+='<div class="p-title">'+item.title+'</div>';
+html+='<div class="p-title">'+p.title+'</div>';
 if(excerpt)html+='<div class="p-excerpt">'+excerpt+'</div>';
 html+='</a>';
 });
 html+='</div>';
 container.innerHTML=html;
-}).catch(function(){
-clearTimeout(timer);
+}
+
+function parseRSS(text){
+var parser=new DOMParser();
+var xml=parser.parseFromString(text,'text/xml');
+var items=xml.querySelectorAll('item');
+var posts=[];
+items.forEach(function(item){
+posts.push({
+title:item.querySelector('title')?item.querySelector('title').textContent:'',
+link:item.querySelector('link')?item.querySelector('link').textContent:'',
+pubDate:item.querySelector('pubDate')?item.querySelector('pubDate').textContent:'',
+description:item.querySelector('description')?item.querySelector('description').textContent:''
+});
+});
+return posts;
+}
+
+function timedFetch(url,ms){
+var ctrl=new AbortController();
+var t=setTimeout(function(){ctrl.abort();},ms);
+return fetch(url,{signal:ctrl.signal}).then(function(r){clearTimeout(t);return r;}).catch(function(e){clearTimeout(t);throw e;});
+}
+
+// Approach A: Direct Substack RSS
+timedFetch('https://sommbc.substack.com/feed',3000)
+.then(function(r){if(!r.ok)throw new Error(r.status);return r.text();})
+.then(function(text){var posts=parseRSS(text);if(!posts.length)throw new Error('empty');renderCards(posts);})
+.catch(function(){
+// Approach B: Toptal feed2json
+timedFetch('https://www.toptal.com/developers/feed2json/convert?url=https%3A%2F%2Fsommbc.substack.com%2Ffeed',3000)
+.then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+.then(function(data){
+if(!data.items||!data.items.length)throw new Error('empty');
+var posts=data.items.map(function(item){return{title:item.title||'',link:item.url||item.link||'',pubDate:item.date_published||item.pubDate||'',description:item.content_text||item.content_html||item.description||''};});
+renderCards(posts);
+})
+.catch(function(){
+// Approach C: AllOrigins proxy
+timedFetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://sommbc.substack.com/feed'),3000)
+.then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+.then(function(data){if(!data.contents)throw new Error('empty');var posts=parseRSS(data.contents);if(!posts.length)throw new Error('empty');renderCards(posts);})
+.catch(function(){/* All failed — fallback link already visible */});
+});
 });
 })();
 
