@@ -431,6 +431,15 @@ var rows=trackList.querySelectorAll('.track-row');
 rows[i].querySelector('.track-duration').textContent=fmt(temp.duration);
 });
 });
+// Autoplay on first user interaction
+var autoStarted=false;
+function autoStartMusic(){
+if(autoStarted||isPlaying)return;
+autoStarted=true;
+playTrack(0);
+['mousemove','scroll','click','touchstart','keydown'].forEach(function(e){document.removeEventListener(e,autoStartMusic);});
+}
+['mousemove','scroll','click','touchstart','keydown'].forEach(function(e){document.addEventListener(e,autoStartMusic,{once:true});});
 })();
 </script>
 </body>
