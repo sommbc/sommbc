@@ -355,6 +355,30 @@ row.addEventListener('click',function(){playTrack(i);});
 trackList.appendChild(row);
 });
 
+function fadeOut(callback){
+var fadeInterval=setInterval(function(){
+if(audio.volume>0.05){
+audio.volume=Math.max(0,audio.volume-0.05);
+}else{
+audio.volume=0;
+clearInterval(fadeInterval);
+if(callback)callback();
+}
+},40);
+}
+
+function fadeIn(){
+audio.volume=0;
+var fadeInterval=setInterval(function(){
+if(audio.volume<0.95){
+audio.volume=Math.min(1,audio.volume+0.05);
+}else{
+audio.volume=1;
+clearInterval(fadeInterval);
+}
+},40);
+}
+
 function playTrack(index){
 if(index===currentIndex&&isPlaying){
 audio.pause();
@@ -368,11 +392,23 @@ isPlaying=true;
 updateUI();
 return;
 }
+if(isPlaying){
+fadeOut(function(){
 audio.src=tracks[index].src;
 audio.play();
+fadeIn();
 currentIndex=index;
 isPlaying=true;
 updateUI();
+});
+}else{
+audio.src=tracks[index].src;
+audio.play();
+fadeIn();
+currentIndex=index;
+isPlaying=true;
+updateUI();
+}
 }
 
 function updateUI(){
@@ -399,10 +435,11 @@ timeDisplay.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
 });
 
 audio.addEventListener('ended',function(){
-var next=(currentIndex+1)%tracks.length;
-audio.src=tracks[next].src;
+currentIndex=(currentIndex+1)%tracks.length;
+audio.src=tracks[currentIndex].src;
+audio.volume=0;
 audio.play();
-currentIndex=next;
+fadeIn();
 isPlaying=true;
 updateUI();
 });
