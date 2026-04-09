@@ -25,7 +25,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
 ::selection{background:var(--rose);color:var(--black)}
-body{background:var(--black);color:var(--bone);font-family:var(--font);line-height:1.55}
+body{background:var(--black);color:var(--bone);font-family:var(--font);line-height:1.55;padding-bottom:80px}
 a{color:inherit;text-decoration:none}
 
 /* NAV */
@@ -131,6 +131,19 @@ footer{max-width:var(--max);margin:0 auto;padding:28px 40px 36px;display:flex;ju
 .ft-links a{font-size:0.58rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--ash-dim);transition:color 0.15s}
 .ft-links a:hover{color:var(--rose)}
 
+/* FIXED PLAYBACK BAR */
+.playback-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--rule-light);padding:12px 40px;flex-direction:row;align-items:center;gap:16px}
+.playback-bar.visible{display:flex}
+.pb-btn{width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid var(--bone);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s;flex-shrink:0;padding:0}
+.pb-btn:hover{background:var(--wine)}
+.pb-btn svg{width:14px;height:14px;fill:var(--bone);stroke:none}
+.pb-play{width:40px;height:40px;border-radius:50%;background:var(--wine);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
+.pb-play svg{width:14px;height:14px;fill:var(--bone);stroke:none}
+.pb-progress{flex:1;height:4px;background:var(--rule-light);border-radius:2px;cursor:pointer;position:relative;min-width:60px}
+.pb-progress-fill{height:100%;background:var(--wine-light);border-radius:2px;width:0%;pointer-events:none}
+.pb-time{color:var(--ash-dim);font-size:0.6rem;font-weight:600;font-variant-numeric:tabular-nums;min-width:80px;text-align:right;flex-shrink:0}
+.pb-title{color:var(--bone);font-size:0.72rem;font-weight:600;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+
 /* MOBILE */
 @media(max-width:768px){
 .hero{padding:0 24px 56px}
@@ -152,6 +165,8 @@ footer{max-width:var(--max);margin:0 auto;padding:28px 40px 36px;display:flex;ju
 footer{padding:20px 24px 28px}
 .track-row{padding:14px 16px}
 .album-header{gap:14px}
+.playback-bar{padding:12px 20px}
+.pb-title{display:none}
 }
 </style>
 </head>
@@ -270,6 +285,16 @@ footer{padding:20px 24px 28px}
 </div>
 </section>
 
+<!-- FIXED PLAYBACK BAR -->
+<div class="playback-bar" id="playbackBar">
+<button class="pb-btn" id="pbBack" aria-label="Previous track"><svg viewBox="0 0 14 14"><polygon points="7,2 2,7 7,12"/><polygon points="12,2 7,7 12,12"/></svg></button>
+<button class="pb-play" id="pbPlay" aria-label="Play/Pause"><svg viewBox="0 0 14 14"><polygon points="3,1 12,7 3,13"/></svg></button>
+<button class="pb-btn" id="pbFwd" aria-label="Next track"><svg viewBox="0 0 14 14"><polygon points="2,2 7,7 2,12"/><polygon points="7,2 12,7 7,12"/></svg></button>
+<div class="pb-progress" id="pbProgress"><div class="pb-progress-fill" id="pbProgressFill"></div></div>
+<div class="pb-time" id="pbTime">0:00 / 0:00</div>
+<div class="pb-title" id="pbTitle"></div>
+</div>
+
 <!-- FOOTER -->
 <footer>
 <div class="ft-copy">&copy; 2026 Brandon Carneiro</div>
@@ -375,6 +400,17 @@ var progressBar=document.getElementById('progressBar');
 var progressFill=document.getElementById('progressFill');
 var timeDisplay=document.getElementById('timeDisplay');
 
+// Fixed playback bar elements
+var playbackBar=document.getElementById('playbackBar');
+var pbBack=document.getElementById('pbBack');
+var pbPlay=document.getElementById('pbPlay');
+var pbFwd=document.getElementById('pbFwd');
+var pbProgress=document.getElementById('pbProgress');
+var pbProgressFill=document.getElementById('pbProgressFill');
+var pbTime=document.getElementById('pbTime');
+var pbTitle=document.getElementById('pbTitle');
+var barShown=false;
+
 var playSVG='<svg viewBox="0 0 14 14"><polygon points="3,1 12,7 3,13"/></svg>';
 var pauseSVG='<svg viewBox="0 0 14 14"><rect x="2" y="1" width="3.5" height="12"/><rect x="8.5" y="1" width="3.5" height="12"/></svg>';
 
@@ -428,6 +464,11 @@ if(callback)callback();
 },40);
 }
 
+// Show fixed bar (once shown, never hidden)
+function showBar(){
+if(!barShown){barShown=true;playbackBar.classList.add('visible');}
+}
+
 // Switch to a new track and play with fade in
 function switchAndPlay(index){
 currentIndex=index;
@@ -436,6 +477,7 @@ audio.volume=0;
 var p=audio.play();
 if(p)p.catch(function(){isPlaying=false;updateUI();});
 isPlaying=true;
+showBar();
 fadeIn();
 updateUI();
 }
@@ -453,6 +495,7 @@ isPlaying=false;
 var p=audio.play();
 if(p)p.catch(function(){isPlaying=false;updateUI();});
 isPlaying=true;
+showBar();
 }
 updateUI();
 return;
@@ -471,7 +514,7 @@ return;
 switchAndPlay(index);
 }
 
-// Update UI — highlight active track, swap icons
+// Update UI — highlight active track, swap icons, sync bar
 function updateUI(){
 var rows=trackList.querySelectorAll('.track-row');
 for(var i=0;i<rows.length;i++){
@@ -485,6 +528,9 @@ if(isPlaying){
 active.classList.add('playing');
 active.querySelector('.track-icon').innerHTML=pauseSVG;
 }
+// Sync fixed bar
+pbTitle.textContent=tracks[currentIndex].title;
+pbPlay.innerHTML=isPlaying?pauseSVG:playSVG;
 }
 }
 
@@ -494,15 +540,18 @@ var nextIndex=(currentIndex+1)%tracks.length;
 switchAndPlay(nextIndex);
 });
 
-// Time update — progress bar and time display
+// Time update — progress bar, time display, and fixed bar
 audio.addEventListener('timeupdate',function(){
 if(isNaN(audio.duration)||audio.duration===0)return;
 var pct=(audio.currentTime/audio.duration)*100;
+var timeStr=fmt(audio.currentTime)+' / '+fmt(audio.duration);
 if(progressFill)progressFill.style.width=pct+'%';
-if(timeDisplay)timeDisplay.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+if(timeDisplay)timeDisplay.textContent=timeStr;
+if(pbProgressFill)pbProgressFill.style.width=pct+'%';
+if(pbTime)pbTime.textContent=timeStr;
 });
 
-// Progress bar click to seek
+// Progress bar click to seek (playlist)
 if(progressBar){
 progressBar.addEventListener('click',function(e){
 if(currentIndex<0||isNaN(audio.duration))return;
@@ -511,6 +560,19 @@ var pct=(e.clientX-rect.left)/rect.width;
 audio.currentTime=pct*audio.duration;
 });
 }
+
+// Fixed bar seek
+pbProgress.addEventListener('click',function(e){
+if(currentIndex<0||isNaN(audio.duration))return;
+var rect=pbProgress.getBoundingClientRect();
+var pct=(e.clientX-rect.left)/rect.width;
+audio.currentTime=pct*audio.duration;
+});
+
+// Fixed bar controls
+pbPlay.addEventListener('click',function(){if(currentIndex>=0)playTrack(currentIndex);});
+pbBack.addEventListener('click',function(){if(currentIndex<0)return;var i=currentIndex>0?currentIndex-1:tracks.length-1;playTrack(i);});
+pbFwd.addEventListener('click',function(){if(currentIndex<0)return;var i=(currentIndex+1)%tracks.length;playTrack(i);});
 
 // Preload durations
 tracks.forEach(function(track,i){
