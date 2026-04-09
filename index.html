@@ -97,13 +97,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.8
 .progress-bar{width:100%;height:3px;background:var(--rule-light);cursor:pointer}
 .progress-fill{height:100%;background:var(--wine-light);width:0%;transition:none}
 .time-display{padding:8px 16px;text-align:right;font-size:0.58rem;font-weight:600;color:var(--ash-dim);font-variant-numeric:tabular-nums}
-.track-row{padding:16px 24px;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:background 0.15s}
+.track-row{padding:16px 24px;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:background 0.15s;min-height:52px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .track-row:last-child{border-bottom:none}
 .track-row:hover{background:rgba(74,15,28,0.08)}
 .track-left{display:flex;align-items:center;gap:12px}
 .track-num{font-size:0.6rem;font-weight:600;color:var(--ash-dim);min-width:20px}
-.track-icon{width:14px;height:14px;flex-shrink:0}
-.track-icon svg{width:14px;height:14px;fill:var(--bone);stroke:none}
+.track-icon{width:14px;height:14px;flex-shrink:0;pointer-events:none}
+.track-icon svg{width:14px;height:14px;fill:var(--bone);stroke:none;pointer-events:none}
 .track-title{font-size:0.88rem;font-weight:600;color:var(--bone);display:flex;align-items:center;gap:8px}
 .track-duration{font-size:0.7rem;font-weight:500;color:var(--ash-dim);font-variant-numeric:tabular-nums}
 .track-row.active.playing .track-title{color:var(--rose)}
@@ -356,7 +356,7 @@ row.innerHTML=
 '<span class="track-title"><span class="rose-dot"></span>'+track.title+'</span>'+
 '</div>'+
 '<span class="track-duration"></span>';
-row.addEventListener('click',function(){playTrack(i);});
+row.addEventListener('click',function(e){e.stopPropagation();playTrack(i);});
 trackList.appendChild(row);
 });
 
