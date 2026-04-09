@@ -78,19 +78,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.8
 /* WRITING */
 .writing-hero-link{display:block;font-size:1.3rem;font-weight:700;color:var(--rose);transition:opacity 0.15s;margin-bottom:40px}
 .writing-hero-link:hover{opacity:0.7}
-.post-link{display:block;border-top:1px solid var(--rule);padding:20px 0;transition:all 0.2s var(--ease)}
-.post-link:last-child{border-bottom:1px solid var(--rule)}
-.post-link:hover{padding-left:12px;background:rgba(74,15,28,0.08)}
-.post-link:hover .p-title{color:var(--rose)}
-.p-top{display:flex;justify-content:space-between;align-items:baseline;gap:20px}
-.p-title{font-size:0.92rem;font-weight:600;color:var(--bone);line-height:1.35;transition:color 0.15s}
-.p-date{font-size:0.58rem;font-weight:500;color:var(--ash-dim);white-space:nowrap}
-.p-excerpt{font-size:0.8rem;font-weight:400;color:var(--ash-dim);margin-top:5px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.posts-loading{padding:20px 0;text-align:center}
-.load-bar{width:80px;height:2px;background:var(--rule-light);margin:0 auto 10px;overflow:hidden}
-.load-bar::after{content:'';display:block;width:30%;height:100%;background:var(--wine-light);animation:sl 0.9s ease infinite}
-@keyframes sl{0%{transform:translateX(-100%)}100%{transform:translateX(400%)}}
-.load-text{font-size:0.55rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--ash-dim)}
+.post-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px}
+.post-card{display:block;background:var(--card);padding:28px 24px;border-top:3px solid var(--wine-light);cursor:pointer;text-decoration:none;color:inherit;transition:border-color 0.2s}
+.post-card:hover{border-top-color:var(--rose)}
+.post-card:hover .p-title{color:var(--rose)}
+.p-date{font-size:0.58rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--ash-dim);white-space:nowrap}
+.p-title{font-size:1rem;font-weight:700;color:var(--bone);line-height:1.35;margin-top:8px;transition:color 0.15s}
+.p-excerpt{font-size:0.82rem;font-weight:400;color:var(--ash);margin-top:8px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 
 /* MUSIC */
 .music-desc{font-size:0.9rem;font-weight:400;line-height:1.7;color:var(--ash);max-width:560px;margin-bottom:32px}
@@ -147,6 +141,7 @@ footer{max-width:var(--max);margin:0 auto;padding:28px 40px 36px;display:flex;ju
 .v-hero-card::after{display:none}
 .v-card{padding:36px 28px}
 .proj-grid{grid-template-columns:1fr}
+.post-grid{grid-template-columns:1fr}
 .cta-routes{flex-direction:column}
 .cta-route{margin-right:0;margin-bottom:-1px}
 .cta-box{padding:36px 24px}
@@ -234,12 +229,7 @@ footer{padding:20px 24px 28px}
 <section class="sec" id="writing">
 <div class="sec-label">Writing</div>
 <a href="https://sommbc.substack.com" target="_blank" rel="noopener" class="writing-hero-link">Read Brick by Brick on Substack →</a>
-<div id="posts">
-<div class="posts-loading" id="posts-loading">
-<div class="load-bar"></div>
-<div class="load-text">Loading</div>
-</div>
-</div>
+<div id="posts"></div>
 </section>
 
 <!-- MUSIC -->
@@ -292,28 +282,27 @@ footer{padding:20px 24px 28px}
 // Substack RSS
 (function(){
 var container=document.getElementById('posts');
-var loading=document.getElementById('posts-loading');
 var ctrl=new AbortController();
 var timer=setTimeout(function(){ctrl.abort();},5000);
-fetch('https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fsommbc.substack.com%2Ffeed&count=5',{signal:ctrl.signal})
+fetch('https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fsommbc.substack.com%2Ffeed&count=3',{signal:ctrl.signal})
 .then(function(r){return r.json();}).then(function(data){
 clearTimeout(timer);
-if(loading)loading.remove();
 if(!data.items||!data.items.length)return;
-var html='';
-data.items.forEach(function(item){
+var html='<div class="post-grid">';
+data.items.slice(0,3).forEach(function(item){
 var d=new Date(item.pubDate);
-var date=d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
-var excerpt=item.description?item.description.replace(/<[^>]*>/g,'').substring(0,200):'';
-html+='<a class="post-link" href="'+item.link+'" target="_blank" rel="noopener">';
-html+='<div class="p-top"><span class="p-title">'+item.title+'</span><span class="p-date">'+date+'</span></div>';
+var date=d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}).toUpperCase();
+var excerpt=item.description?item.description.replace(/<[^>]*>/g,'').substring(0,140):'';
+html+='<a class="post-card" href="'+item.link+'" target="_blank" rel="noopener">';
+html+='<div class="p-date">'+date+'</div>';
+html+='<div class="p-title">'+item.title+'</div>';
 if(excerpt)html+='<div class="p-excerpt">'+excerpt+'</div>';
 html+='</a>';
 });
-container.insertAdjacentHTML('beforeend',html);
+html+='</div>';
+container.innerHTML=html;
 }).catch(function(){
 clearTimeout(timer);
-if(loading)loading.remove();
 });
 })();
 
