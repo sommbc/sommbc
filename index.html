@@ -373,7 +373,7 @@ timedFetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://som
 })();
 
 // ═══ MUSIC PLAYER — CLEAN REWRITE ═══
-(function(){
+document.addEventListener('DOMContentLoaded',function(){
 var tracks=[
 {title:'Beneath the Hull',src:'music/Beneath the Hull.mp3'},
 {title:'Into the Vast',src:'music/Into the Vast.mp3'},
@@ -410,6 +410,7 @@ var pbProgressFill=document.getElementById('pbProgressFill');
 var pbTime=document.getElementById('pbTime');
 var pbTitle=document.getElementById('pbTitle');
 var barShown=false;
+var autoStartEvents=['click','touchstart','keydown'];
 
 var playSVG='<svg viewBox="0 0 14 14"><polygon points="3,1 12,7 3,13"/></svg>';
 var pauseSVG='<svg viewBox="0 0 14 14"><rect x="2" y="1" width="3.5" height="12"/><rect x="8.5" y="1" width="3.5" height="12"/></svg>';
@@ -466,7 +467,29 @@ if(callback)callback();
 
 // Show fixed bar (once shown, never hidden)
 function showBar(){
-if(!barShown){barShown=true;playbackBar.classList.add('visible');}
+if(playbackBar&&!barShown){
+barShown=true;
+playbackBar.classList.add('visible');
+}
+}
+
+function playAudio(){
+var p=audio.play();
+if(p)p.catch(function(){
+isPlaying=false;
+updateUI();
+});
+return p;
+}
+
+function isAudioAlreadyPlaying(){
+return !!audio.currentSrc&&!audio.paused&&!audio.ended;
+}
+
+function removeAutoStartListeners(){
+autoStartEvents.forEach(function(eventName){
+document.removeEventListener(eventName,autoStartMusic);
+});
 }
 
 // Switch to a new track and play with fade in
@@ -474,8 +497,7 @@ function switchAndPlay(index){
 currentIndex=index;
 audio.src=tracks[currentIndex].src;
 audio.volume=0;
-var p=audio.play();
-if(p)p.catch(function(){isPlaying=false;updateUI();});
+playAudio();
 isPlaying=true;
 showBar();
 fadeIn();
@@ -492,8 +514,7 @@ if(isPlaying){
 audio.pause();
 isPlaying=false;
 }else{
-var p=audio.play();
-if(p)p.catch(function(){isPlaying=false;updateUI();});
+playAudio();
 isPlaying=true;
 showBar();
 }
@@ -586,13 +607,20 @@ if(rows[i])rows[i].querySelector('.track-duration').textContent=fmt(temp.duratio
 // Autostart on first click/touch/keydown
 var autoStarted=false;
 function autoStartMusic(){
-if(autoStarted||isPlaying)return;
+console.log('Autostart triggered');
+removeAutoStartListeners();
+if(autoStarted||isAudioAlreadyPlaying()){
 autoStarted=true;
-playTrack(0);
-['click','touchstart','keydown'].forEach(function(e){document.removeEventListener(e,autoStartMusic);});
+return;
 }
-['click','touchstart','keydown'].forEach(function(e){document.addEventListener(e,autoStartMusic,{once:true});});
-})();
+autoStarted=true;
+showBar();
+playTrack(0);
+}
+autoStartEvents.forEach(function(eventName){
+document.addEventListener(eventName,autoStartMusic);
+});
+});
 </script>
 </body>
 </html>
