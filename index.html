@@ -276,6 +276,13 @@ if(loading)loading.remove();
 (function(){
 var btn=document.getElementById('audioBtn');
 var audio=document.getElementById('ambientAudio');
+var events=['scroll','click','touchstart','keydown','mousemove'];
+function startAmbient(){
+  audio.play().catch(function(){});
+  btn.classList.add('playing');
+  events.forEach(function(e){document.removeEventListener(e,startAmbient);});
+}
+events.forEach(function(e){document.addEventListener(e,startAmbient,{once:true});});
 btn.addEventListener('click',function(){
 if(audio.paused){audio.play();btn.classList.add('playing');}
 else{audio.pause();btn.classList.remove('playing');}
