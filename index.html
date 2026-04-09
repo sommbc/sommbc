@@ -79,12 +79,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.8
 .writing-hero-link{display:block;font-size:1.3rem;font-weight:700;color:var(--rose);transition:opacity 0.15s;margin-bottom:40px}
 .writing-hero-link:hover{opacity:0.7}
 .post-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px}
-.post-card{display:block;background:var(--card);padding:28px 24px;border-top:3px solid var(--wine-light);cursor:pointer;text-decoration:none;color:inherit;transition:border-color 0.2s}
-.post-card:hover{border-top-color:var(--rose)}
+.post-card{display:block;background:var(--card);padding:28px 24px;border-top:3px solid var(--wine-light);cursor:pointer;text-decoration:none;color:inherit;transition:border-top-color 0.2s,transform 0.2s,box-shadow 0.2s}
+.post-card:hover{border-top-color:var(--rose);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.35)}
 .post-card:hover .p-title{color:var(--rose)}
-.p-date{font-size:0.58rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--ash-dim);white-space:nowrap}
+.p-date{font-size:0.58rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--ash-dim)}
 .p-title{font-size:1rem;font-weight:700;color:var(--bone);line-height:1.35;margin-top:8px;transition:color 0.15s}
 .p-excerpt{font-size:0.82rem;font-weight:400;color:var(--ash);margin-top:8px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.p-read{font-size:0.62rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--wine-light);margin-top:20px;transition:color 0.15s}
+.post-card:hover .p-read{color:var(--rose)}
 
 /* MUSIC */
 .music-desc{font-size:0.9rem;font-weight:400;line-height:1.7;color:var(--ash);max-width:560px;margin-bottom:32px}
@@ -145,8 +147,6 @@ footer{max-width:var(--max);margin:0 auto;padding:28px 40px 36px;display:flex;ju
 .cta-routes{flex-direction:column}
 .cta-route{margin-right:0;margin-bottom:-1px}
 .cta-box{padding:36px 24px}
-.p-top{flex-direction:column;gap:2px}
-.p-date{order:-1}
 footer{padding:20px 24px 28px}
 .track-row{padding:14px 16px}
 .album-header{gap:14px}
@@ -297,6 +297,7 @@ html+='<a class="post-card" href="'+item.link+'" target="_blank" rel="noopener">
 html+='<div class="p-date">'+date+'</div>';
 html+='<div class="p-title">'+item.title+'</div>';
 if(excerpt)html+='<div class="p-excerpt">'+excerpt+'</div>';
+html+='<div class="p-read">Read →</div>';
 html+='</a>';
 });
 html+='</div>';
