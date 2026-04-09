@@ -26,7 +26,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
 ::selection{background:var(--rose);color:var(--black)}
-body{background:var(--black);color:var(--bone);font-family:var(--font);line-height:1.55;padding-bottom:108px}
+body{background:var(--black);color:var(--bone);font-family:var(--font);line-height:1.55}
 a{color:inherit;text-decoration:none}
 button{font:inherit}
 section[id]{scroll-margin-top:80px}
@@ -95,11 +95,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.8
 .album-title{font-size:1.1rem;font-weight:700;color:var(--bone)}
 .album-meta{font-size:0.78rem;font-weight:500;color:var(--ash-dim)}
 .playlist-card{background:var(--card);border:1px solid var(--rule-light);padding:0}
-.progress-hitbox{width:100%;min-height:44px;display:flex;align-items:center;cursor:pointer}
-.progress-bar{width:100%;height:4px;background:var(--rule-light);pointer-events:none}
+.progress-hitbox{width:100%;height:3px;display:block;cursor:pointer;padding:0;margin:0;line-height:0}
+.progress-bar{width:100%;height:3px;background:var(--rule-light);pointer-events:none;padding:0;margin:0;display:block}
 .progress-fill{height:100%;background:var(--wine-light);width:0%;transition:none}
-.time-display{padding:8px 16px;text-align:right;font-size:0.72rem;font-weight:600;color:var(--ash-dim);font-variant-numeric:tabular-nums}
-.track-row{width:100%;padding:16px 24px;border:none;border-bottom:1px solid var(--rule);background:transparent;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:background 0.15s;min-height:52px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;text-align:left;appearance:none;-webkit-appearance:none}
+.time-display{padding:4px 16px;text-align:right;font-size:0.72rem;font-weight:600;color:var(--ash-dim);font-variant-numeric:tabular-nums}
+#trackList{margin:0;padding:0}
+.track-row{width:100%;padding:16px 24px;border:none;border-bottom:1px solid var(--rule);background:transparent;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:background 0.15s;min-height:52px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;text-align:left;appearance:none;-webkit-appearance:none;margin-top:0}
 .track-row:last-child{border-bottom:none}
 .track-row:hover{background:rgba(74,15,28,0.08)}
 .track-left{display:flex;align-items:center;gap:12px}
@@ -123,26 +124,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.8
 .cta-rn{font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--bone);margin-bottom:3px;transition:color 0.15s}
 .cta-rd{font-size:0.72rem;font-weight:400;color:var(--ash-dim)}
 
-footer{max-width:var(--max);margin:0 auto;padding:28px 40px 36px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+footer{max-width:var(--max);margin:0 auto;padding:28px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 .ft-copy{font-size:0.72rem;font-weight:500;color:var(--ash-dim)}
 .ft-links{display:flex;gap:20px}
 .ft-links a{font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--ash-dim);transition:color 0.15s;padding:12px 4px;min-height:44px;display:inline-flex;align-items:center}
 .ft-links a:hover{color:var(--rose)}
 
-.playback-bar{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(22,22,21,0.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--rule-light);padding:12px 40px;flex-direction:row;align-items:center;gap:16px}
-.pb-btn{width:44px;height:44px;border-radius:50%;background:transparent;border:1px solid var(--bone);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s;flex-shrink:0;padding:0}
-.pb-btn:hover{background:var(--wine)}
-.pb-btn:disabled{opacity:0.45;cursor:not-allowed}
-.pb-btn svg{width:14px;height:14px;fill:var(--bone);stroke:none}
-.pb-play{width:44px;height:44px;border-radius:50%;background:var(--wine);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
-.pb-play svg{width:14px;height:14px;fill:var(--bone);stroke:none}
-.pb-progress-hitbox{flex:1;min-height:44px;display:flex;align-items:center;cursor:pointer;min-width:60px}
-.pb-progress{width:100%;height:4px;background:var(--rule-light);border-radius:2px;position:relative;pointer-events:none}
-.pb-progress-fill{height:100%;background:var(--wine-light);border-radius:2px;width:0%;pointer-events:none}
-.pb-time{color:var(--ash-dim);font-size:0.72rem;font-weight:600;font-variant-numeric:tabular-nums;min-width:80px;text-align:right;flex-shrink:0}
-.pb-title{color:var(--bone);font-size:0.72rem;font-weight:600;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
-
-.track-row:focus-visible,button:focus-visible,.progress-hitbox:focus-visible,.pb-progress-hitbox:focus-visible,a:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+.track-row:focus-visible,button:focus-visible,.progress-hitbox:focus-visible,a:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
 
 @media(max-width:768px){
 .hero{padding:0 24px 56px}
@@ -165,15 +153,13 @@ footer{max-width:var(--max);margin:0 auto;padding:28px 40px 36px;display:flex;ju
 .cta-routes{flex-direction:column}
 .cta-route{margin-right:0;margin-bottom:-1px}
 .cta-box{padding:36px 24px}
-footer{padding:20px 24px 28px}
+footer{padding:20px 24px}
 .track-row{padding:14px 16px}
 .track-row .track-num{font-size:0.75rem}
 .track-row .track-duration{font-size:0.75rem}
 .album-header{gap:14px}
-.time-display,.pb-time{font-size:0.75rem}
+.time-display{font-size:0.75rem}
 .ft-copy,.ft-links a{font-size:0.75rem}
-.playback-bar{padding:12px 20px}
-.pb-title{display:none}
 }
 </style>
 </head>
@@ -293,15 +279,6 @@ My brothers and sisters, whenever you face various trials, consider it all joy, 
 </div>
 </section>
 
-<div class="playback-bar" id="playbackBar">
-<button class="pb-btn" id="pbBack" aria-label="Previous track" tabindex="0" onclick="playTrack((currentIndex - 1 + tracks.length) % tracks.length)" style="-webkit-tap-highlight-color:transparent; touch-action:manipulation;"><svg viewBox="0 0 14 14" style="pointer-events:none"><polygon points="7,2 2,7 7,12"></polygon><polygon points="12,2 7,7 12,12"></polygon></svg></button>
-<button class="pb-play" id="pbPlay" aria-label="Play" tabindex="0" onclick="togglePlayPause()" style="-webkit-tap-highlight-color:transparent; touch-action:manipulation;"><svg viewBox="0 0 14 14" style="pointer-events:none"><polygon points="3,1 12,7 3,13"></polygon></svg></button>
-<button class="pb-btn" id="pbFwd" aria-label="Next track" tabindex="0" onclick="playTrack((currentIndex + 1) % tracks.length)" style="-webkit-tap-highlight-color:transparent; touch-action:manipulation;"><svg viewBox="0 0 14 14" style="pointer-events:none"><polygon points="2,2 7,7 2,12"></polygon><polygon points="7,2 12,7 7,12"></polygon></svg></button>
-<div class="pb-progress-hitbox" id="pbSeek" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0" onclick="seekPlayback(event)"><div class="pb-progress" id="pbProgress"><div class="pb-progress-fill" id="pbProgressFill"></div></div></div>
-<div class="pb-time" id="pbTime">0:00 / 0:00</div>
-<div class="pb-title" id="pbTitle">Select a track</div>
-</div>
-
 <footer>
 <div class="ft-copy">&copy; 2026 Brandon Carneiro</div>
 <div class="ft-links">
@@ -420,14 +397,6 @@ var trackList=null;
 var progressSeek=null;
 var progressFill=null;
 var timeDisplay=null;
-var playbackBar=null;
-var pbPlay=null;
-var pbBack=null;
-var pbFwd=null;
-var pbSeek=null;
-var pbProgressFill=null;
-var pbTime=null;
-var pbTitle=null;
 
 var playSVG='<svg viewBox="0 0 14 14" style="pointer-events:none"><polygon points="3,1 12,7 3,13"></polygon></svg>';
 var pauseSVG='<svg viewBox="0 0 14 14" style="pointer-events:none"><rect x="2" y="1" width="3.5" height="12"></rect><rect x="8.5" y="1" width="3.5" height="12"></rect></svg>';
@@ -437,14 +406,6 @@ trackList=document.getElementById('trackList');
 progressSeek=document.getElementById('progressSeek');
 progressFill=document.getElementById('progressFill');
 timeDisplay=document.getElementById('timeDisplay');
-playbackBar=document.getElementById('playbackBar');
-pbPlay=document.getElementById('pbPlay');
-pbBack=document.getElementById('pbBack');
-pbFwd=document.getElementById('pbFwd');
-pbSeek=document.getElementById('pbSeek');
-pbProgressFill=document.getElementById('pbProgressFill');
-pbTime=document.getElementById('pbTime');
-pbTitle=document.getElementById('pbTitle');
 }
 
 function fmt(seconds){
@@ -460,10 +421,6 @@ node.setAttribute('aria-valuenow',String(Math.round(percent)));
 node.setAttribute('aria-valuetext',label);
 }
 
-function showBar(){
-if(playbackBar)playbackBar.style.display='flex';
-}
-
 function updateProgress(){
 var duration=isFinite(audio.duration)&&audio.duration>0?audio.duration:0;
 var current=isFinite(audio.currentTime)?audio.currentTime:0;
@@ -472,11 +429,8 @@ var totalLabel=duration?fmt(duration):(currentIndex>=0?tracks[currentIndex].dura
 var label=fmt(current)+' / '+totalLabel;
 
 if(progressFill)progressFill.style.width=percent+'%';
-if(pbProgressFill)pbProgressFill.style.width=percent+'%';
 if(timeDisplay)timeDisplay.textContent=label;
-if(pbTime)pbTime.textContent=label;
 setSeekA11y(progressSeek,percent,label);
-setSeekA11y(pbSeek,percent,label);
 }
 
 function updateUI(){
@@ -498,13 +452,6 @@ if(icon)icon.innerHTML=pauseSVG;
 }
 });
 
-if(pbBack)pbBack.disabled=false;
-if(pbFwd)pbFwd.disabled=false;
-if(pbPlay){
-pbPlay.innerHTML=isPlaying?pauseSVG:playSVG;
-pbPlay.setAttribute('aria-label',isPlaying?'Pause':'Play');
-}
-if(pbTitle)pbTitle.textContent=currentIndex>=0?tracks[currentIndex].title:'Select a track';
 updateProgress();
 }
 
@@ -524,14 +471,12 @@ if(!tracks.length)return;
 currentIndex=((index%tracks.length)+tracks.length)%tracks.length;
 audio.src=tracks[currentIndex].src;
 audio.currentTime=0;
-showBar();
 updateUI();
 }
 
 function playCurrent(){
 if(currentIndex<0)loadTrack(0);
 isPlaying=true;
-showBar();
 updateUI();
 playWithCatch();
 }
@@ -582,10 +527,6 @@ seekTo(((clientX-rect.left)/rect.width)*100);
 
 function seekPlaylist(event){
 seekFromEvent(event,progressSeek);
-}
-
-function seekPlayback(event){
-seekFromEvent(event,pbSeek);
 }
 
 function handleSliderKey(event){
@@ -642,7 +583,6 @@ function initializeMusicPlayer(){
 cacheMusicElements();
 renderTrackRows();
 if(progressSeek)progressSeek.addEventListener('keydown',handleSliderKey);
-if(pbSeek)pbSeek.addEventListener('keydown',handleSliderKey);
 updateUI();
 }
 
