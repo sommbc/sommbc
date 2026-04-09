@@ -22,7 +22,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"></noscript>
 <style>
-:root{--black:#0A0A0A;--bone:#F4F1EA;--ash:#A8A29E;--ash-dim:#918A82;--rule:#1e1c1a;--rule-light:#332F2B;--wine:#4A0F1C;--wine-light:#D25A77;--wine-glow:rgba(74,15,28,0.25);--rose:#FF2D7A;--rose-glow:rgba(255,45,122,0.10);--card:#161615;--card-hover:#171615;--font:'Plus Jakarta Sans',-apple-system,sans-serif;--max:1080px}
+:root{--black:#0A0A0A;--bone:#F4F1EA;--ash:#A8A29E;--ash-dim:#918A82;--rule:#1e1c1a;--rule-light:#332F2B;--wine:#4A0F1C;--wine-light:#B03050;--wine-glow:rgba(74,15,28,0.25);--rose:#FF2D7A;--rose-glow:rgba(255,45,122,0.10);--card:#161615;--card-hover:#171615;--font:'Plus Jakarta Sans',-apple-system,sans-serif;--max:1080px}
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
 ::selection{background:var(--rose);color:var(--black)}
@@ -39,7 +39,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.8
 .nav-links a:hover{color:var(--bone)}
 
 .hero-wrap{position:relative;min-height:100vh;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background-image:url('hero.png');background-image:image-set(url('hero.webp') type('image/webp'),url('hero.png') type('image/png'));background-repeat:no-repeat;background-position:right center;background-size:cover}
+.hero-bg{position:absolute;inset:0;background-image:url('hero.webp');/* hero.png fallback retained if needed */background-repeat:no-repeat;background-position:right center;background-size:cover}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,10,10,0.85) 0%,rgba(10,10,10,0.55) 45%,rgba(10,10,10,0.15) 100%)}
 .hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 40px 72px;max-width:var(--max);margin:0 auto}
 .hero-role{font-size:0.72rem;font-weight:700;letter-spacing:0.35em;text-transform:uppercase;color:var(--ash);margin-top:auto;padding-top:140px;margin-bottom:12px}
@@ -150,8 +150,8 @@ footer{max-width:var(--max);margin:0 auto;padding:28px 40px 36px;display:flex;ju
 .sec{padding:60px 24px}
 .nav-inner{padding:13px 24px}
 .nav-links{gap:12px}
-.nav-links a{font-size:0.72rem}
-.sec-label{font-size:0.72rem}
+.nav-links a{font-size:0.75rem}
+.sec-label{font-size:0.75rem}
 .v-hero-card{padding:36px 28px}
 .v-hero-card::after{display:none}
 .v-card{padding:36px 28px}
@@ -162,11 +162,11 @@ footer{max-width:var(--max);margin:0 auto;padding:28px 40px 36px;display:flex;ju
 .cta-box{padding:36px 24px}
 footer{padding:20px 24px 28px}
 .track-row{padding:14px 16px}
-.track-row .track-num{font-size:0.72rem}
+.track-row .track-num{font-size:0.75rem}
 .track-row .track-duration{font-size:0.75rem}
 .album-header{gap:14px}
-.time-display,.pb-time{font-size:0.72rem}
-.ft-copy,.ft-links a{font-size:0.72rem}
+.time-display,.pb-time{font-size:0.75rem}
+.ft-copy,.ft-links a{font-size:0.75rem}
 .playback-bar{padding:12px 20px}
 .pb-title{display:none}
 }
@@ -301,7 +301,7 @@ footer{padding:20px 24px 28px}
 <script>
 const substackPosts = [
   {title: "The AI You Get Isn't the AI That Exists", url: 'https://sommbc.substack.com/p/the-ai-you-get-isnt-the-ai-that-exists', date: '2026'},
-  {title: 'The Math of Survival', url: 'https://sommbc.substack.com/p/the-math-of-survival', date: 'February 16, 2026'},
+  {title: 'The Math of Survival', url: 'https://sommbc.substack.com/p/the-math-of-survival', date: 'Feb 16, 2026'},
   {title: 'The Minimum Viable Company', url: 'https://sommbc.substack.com/p/the-minimum-viable-company', date: '2026'}
 ];
 
