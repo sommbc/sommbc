@@ -231,7 +231,7 @@ footer{padding:20px 24px 28px}
 <span class="audio-dot"></span>
 <svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg>
 </button>
-<audio id="ambientAudio" loop preload="none" src="Beneath_the_Hull.mp3"></audio>
+<audio id="ambientAudio" preload="none"></audio>
 
 <!-- FOOTER -->
 <footer>
@@ -276,6 +276,14 @@ if(loading)loading.remove();
 (function(){
 var btn=document.getElementById('audioBtn');
 var audio=document.getElementById('ambientAudio');
+var tracks=['Beneath_the_Hull.mp3','Twelve_Miles_Out.mp3'];
+var currentTrack=Math.floor(Math.random()*tracks.length);
+audio.src=tracks[currentTrack];
+audio.addEventListener('ended',function(){
+  currentTrack=(currentTrack+1)%tracks.length;
+  audio.src=tracks[currentTrack];
+  audio.play();
+});
 var events=['scroll','click','touchstart','keydown','mousemove'];
 function startAmbient(){
   audio.play().catch(function(){});
