@@ -62,6 +62,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.8
 @keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
 .v-role{font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--ash-dim);margin-bottom:16px}
 .v-desc{font-size:0.9rem;font-weight:400;line-height:1.72;color:var(--ash);max-width:560px}
+.v-card{background:var(--card);padding:48px;border-left:3px solid transparent;transition:all 0.25s;margin-top:3px}
+.v-card:hover{background:var(--card-hover);border-left-color:var(--wine)}
+.v-card .v-name{color:var(--bone)}
 
 /* SIDE PROJECTS */
 .proj-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px}
@@ -142,6 +145,7 @@ footer{max-width:var(--max);margin:0 auto;padding:28px 40px 36px;display:flex;ju
 .nav-links a{font-size:0.6rem}
 .v-hero-card{padding:36px 28px}
 .v-hero-card::after{display:none}
+.v-card{padding:36px 28px}
 .proj-grid{grid-template-columns:1fr}
 .cta-routes{flex-direction:column}
 .cta-route{margin-right:0;margin-bottom:-1px}
@@ -194,6 +198,16 @@ footer{padding:20px 24px 28px}
 </div>
 <div class="v-role">Founder &amp; CEO</div>
 <p class="v-desc">Governed AI for the local church. Each congregation owns its instance — doctrine, teaching voice, escalation logic. The switching cost is theological, not technical.</p>
+</div>
+<div class="v-card">
+<div class="v-problem">THE PROBLEM</div>
+<p class="v-problem-text">Mechanics are already guessing torque specs on every job they touch. Lug nuts. Head bolts. Axle nuts. Calipers. The lookup tools take six minutes and most techs don't even bother — they just send it.</p>
+<div class="v-name-row">
+<div class="v-name">FLOW</div>
+<div class="v-stage"><span class="v-dot"></span> Pre-Seed · Live Testing</div>
+</div>
+<div class="v-role">Founder & CEO</div>
+<p class="v-desc">Voice-first AI for the professional technician. Each spec returns in seconds — job tables, verified data, hands never leave the car. The switching cost is accuracy, not technical.</p>
 </div>
 </section>
 
