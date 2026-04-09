@@ -379,6 +379,17 @@ clearInterval(fadeInterval);
 },40);
 }
 
+function safePlay(){
+var p=audio.play();
+if(p!==undefined){
+p.catch(function(err){
+console.log('Autoplay blocked:',err);
+isPlaying=false;
+updateUI();
+});
+}
+}
+
 function playTrack(index){
 if(index===currentIndex&&isPlaying){
 audio.pause();
@@ -387,7 +398,7 @@ updateUI();
 return;
 }
 if(index===currentIndex&&!isPlaying){
-audio.play();
+safePlay();
 isPlaying=true;
 updateUI();
 return;
@@ -395,7 +406,7 @@ return;
 if(isPlaying){
 fadeOut(function(){
 audio.src=tracks[index].src;
-audio.play();
+safePlay();
 fadeIn();
 currentIndex=index;
 isPlaying=true;
@@ -403,7 +414,7 @@ updateUI();
 });
 }else{
 audio.src=tracks[index].src;
-audio.play();
+safePlay();
 fadeIn();
 currentIndex=index;
 isPlaying=true;
@@ -438,7 +449,7 @@ audio.addEventListener('ended',function(){
 currentIndex=(currentIndex+1)%tracks.length;
 audio.src=tracks[currentIndex].src;
 audio.volume=0;
-audio.play();
+safePlay();
 fadeIn();
 isPlaying=true;
 updateUI();
@@ -474,9 +485,9 @@ function autoStartMusic(){
 if(autoStarted||isPlaying)return;
 autoStarted=true;
 playTrack(0);
-['mousemove','scroll','click','touchstart','keydown'].forEach(function(e){document.removeEventListener(e,autoStartMusic);});
+['click','touchstart','keydown'].forEach(function(e){document.removeEventListener(e,autoStartMusic);});
 }
-['mousemove','scroll','click','touchstart','keydown'].forEach(function(e){document.addEventListener(e,autoStartMusic,{once:true});});
+['click','touchstart','keydown'].forEach(function(e){document.addEventListener(e,autoStartMusic,{once:true});});
 })();
 </script>
 </body>
